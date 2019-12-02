@@ -14,6 +14,7 @@ from __future__ import unicode_literals
 import os.path
 import json
 from bs4 import BeautifulSoup
+import re
 from codecs import open
 try:
     from urlparse import urljoin
@@ -34,6 +35,7 @@ class Tipue_Search_JSON_Generator(object):
         self.tpages = settings.get('TEMPLATE_PAGES')
         self.output_path = output_path
         self.json_nodes = []
+        self.pattern = re.compile(r'[^\u4e00-\u9fa5]')
 
 
     def create_json_node(self, page):
@@ -45,8 +47,10 @@ class Tipue_Search_JSON_Generator(object):
         page_title = soup_title.get_text(' ', strip=True).replace('“', '"').replace('”', '"').replace('’', "'").replace('^', '&#94;')
 
         soup_text = BeautifulSoup(page.content, 'html.parser')
-        page_text = soup_text.get_text(' ', strip=True).replace('“', '"').replace('”', '"').replace('’', "'").replace('¶', ' ').replace('^', '&#94;')
-        page_text = ' '.join(page_text.split())
+        
+        # page_text = soup_text.get_text(' ', strip=True).replace('“', '"').replace('”', '"').replace('’', "'").replace('¶', ' ').replace('^', '&#94;')
+        # page_text = ' '.join(page_text.split())
+        page_text = re.sub(self.pattern, '',soup_text.get_text()) 
 
         page_category = page.category.name if getattr(page, 'category', 'None') != 'None' else ''
 
@@ -56,7 +60,7 @@ class Tipue_Search_JSON_Generator(object):
 
         node = {'title': page_title,
                 'text': page_text,
-                'tags': page_category,
+                # 'tags': page_category,
                 'url': page_url,
                 'loc': page_url} # changed from 'url' following http://blog.siphos.be/2015/08/updates-on-my-pelican-adventure/ (an update to Pelican made it not work, because the update (e.g., in the theme folder, static/tipuesearch/tipuesearch.js is looking for the 'loc' attribute.
 
