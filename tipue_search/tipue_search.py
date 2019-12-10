@@ -14,6 +14,7 @@ from __future__ import unicode_literals
 import os.path
 import json
 from bs4 import BeautifulSoup
+import re
 from codecs import open
 try:
     from urlparse import urljoin
@@ -34,6 +35,7 @@ class Tipue_Search_JSON_Generator(object):
         self.tpages = settings.get('TEMPLATE_PAGES')
         self.output_path = output_path
         self.json_nodes = []
+        self.pattern = re.compile(r'[^\u4e00-\u9fa5]')
 
 
     def create_json_node(self, page):
@@ -68,14 +70,14 @@ class Tipue_Search_JSON_Generator(object):
         srcfile = open(os.path.join(self.output_path, self.tpages[srclink]), encoding='utf-8')
         soup = BeautifulSoup(srcfile, 'html.parser')
         page_title = soup.title.string if soup.title is not None else ''
-        page_text = soup.get_text()
+        # page_text = soup.get_text()
 
         # Should set default category?
         page_category = ''
         page_url = urljoin(self.siteurl, self.tpages[srclink])
 
         node = {'title': page_title,
-                'text': page_text,
+                'text': "",
                 'tags': page_category,
                 'url': page_url}
 

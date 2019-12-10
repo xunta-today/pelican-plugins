@@ -142,3 +142,6 @@
 [submodule "similar_posts"]
 	path = similar_posts
 	url = https://github.com/davidlesieur/similar_posts.git
+[submodule "niux2_lazyload_helper"]
+	path = niux2_lazyload_helper
+	url = https://github.com/mawenbao/niux2_lazyload_helper.git
