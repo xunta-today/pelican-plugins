@@ -55,7 +55,7 @@ class Tipue_Search_JSON_Generator(object):
             page_url = page.url if self.relative_urls else (self.siteurl + '/' + page.url)
 
         node = {'title': page_title,
-                # 'text': page_text,
+                'text': '',
                 'tags': page_category,
                 'url': page_url,
                 'loc': page_url} # changed from 'url' following http://blog.siphos.be/2015/08/updates-on-my-pelican-adventure/ (an update to Pelican made it not work, because the update (e.g., in the theme folder, static/tipuesearch/tipuesearch.js is looking for the 'loc' attribute.
